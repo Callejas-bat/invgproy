@@ -4,12 +4,12 @@ import fetch from 'node-fetch';
 export default async function handler(req, res) {
     try {
         // Cargar el modelo desde una URL externa
-        const modelUrl = 'https://tu-cdn-o-s3-bucket.com/model.json';
+        const modelUrl = 'model.json';
         const model = await tf.loadGraphModel(modelUrl);
 
         // Cargar el scaler y el label encoder desde URLs
-        const scalerUrl = 'https://tu-cdn-o-s3-bucket.com/scaler.json';
-        const labelEncoderUrl = 'https://tu-cdn-o-s3-bucket.com/label_encoder.json';
+        const scalerUrl = 'scaler.json';
+        const labelEncoderUrl = 'label_encoder.json';
 
         const [scalerResponse, labelEncoderResponse] = await Promise.all([
             fetch(scalerUrl),

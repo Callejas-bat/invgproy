@@ -2,16 +2,10 @@ const express = require('express');
 const tf = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 const path = require('path');
-const admin = require('firebase-admin');
 
 // Configuración del servidor
 const app = express();
 const port = process.env.PORT || 3000;
-
-admin.initializeApp({
-  databaseURL: 'https://invg-proyecto-default-rtdb.firebaseio.com/'  // Reemplaza con tu URL de base de datos
-});
-const db = admin.database();  // Usar para Realtime Database
 
 let model, scaler, labelEncoder;
 
@@ -82,26 +76,6 @@ app.get('/predict', async (req, res) => {
     } catch (error) {
         console.error('Error during prediction:', error);
         return res.status(500).json({ error: `Error during prediction: ${error.message}` });
-    }
-});
-
-app.get('/weather', async (req, res) => {
-    try {
-        const snapshot = await db.ref('/LIVE/WEATHER').once('value');  // Para Realtime Database
-        // const snapshot = await db.collection('your-collection').doc('WEATHER').get(); // Para Firestore
-        
-        if (!snapshot.exists) {
-            return res.status(404).json({ error: 'No data found for WEATHER' });
-        }
-
-        const weather = snapshot.val();  // Para Realtime Database
-        // const weather = snapshot.data(); // Para Firestore
-
-        return res.status(200).json({ weather });
-
-    } catch (error) {
-        console.error('Error retrieving weather data:', error);
-        return res.status(500).json({ error: `Error retrieving weather data: ${error.message}` });
     }
 });
 
